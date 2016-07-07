@@ -22,17 +22,35 @@ cd $BUILD_DIR
 source $BP_DIR/lib/output.sh
 source $BP_DIR/lib/environment.sh
 source $BP_DIR/lib/assets.sh
+source $BP_DIR/lib/cache.sh
 
 ### Compile
 
 header "Creating environment"
+create_default_env
 export_env_dir "$ENV_DIR"
 
-header "Downloading assets tarball"
-download_assets
+get_assets() {
+  local cache_status="$(get_cache_status)"
 
-header "Extracting assets to output path"
-extract_assets "$BUILD_DIR"
+  if [ "$cache_status" == "valid" ]; then
+    info "Copying assets from cache"
+    copy_assets_from_cache
+  else
+    info "Downloading assets tarball"
+    download_assets
 
-header "Cleaning assets"
-clean_assets
+    info "Extracting assets to output path"
+    extract_assets
+
+    info "Cleaning assets tarball"
+    clean_assets_tarball
+  fi
+}
+
+header "Getting assets"
+get_assets
+
+header "Updating assets cache"
+clear_cache
+cache_assets

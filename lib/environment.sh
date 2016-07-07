@@ -1,3 +1,7 @@
+create_default_env() {
+  export ASSETS_CACHE=${ASSETS_CACHE:-true}
+}
+
 export_env_dir() {
   local env_dir=$1
   if [ -d "$env_dir" ]; then
