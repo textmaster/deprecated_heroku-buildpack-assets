@@ -32,4 +32,7 @@ header "Downloading assets tarball"
 download_assets
 
 header "Extracting assets to output path"
-extract_assets
+extract_assets "$BUILD_DIR"
+
+header "Cleaning assets"
+clean_assets
